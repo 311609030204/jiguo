@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .active{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <!--冒泡是从里到外，捕获是从外到里 -->
+    <!-- target：指向引起触发事件的元素。 -->
+    <!-- currentTarget：事件绑定的元素。只有被点击的那个目标元素的event.target才会等于event.currentTarget。 -->
+    <div id="one">
+        <div id="two">
+           <div id="three">
+                click me ~
+            </div>
+        </div>
+    </div>
+    <div id="content" data-user-list="我是自定义属性"></div>
+    <div id="datas" data-textid='我是text'></div>
+    <ul id="list">
+        <!-- <li class="active">1111111</li>
+        <li>2222222</li>
+        <li>3333333</li> -->
+    </ul>
+    <script src="./jquery.min.js"></script>
+    <script src="./doT.min.js"></script>
+    <script id="listDot" type="text/x-dot-template">
+        {{~it.list:value:index}}
+            {{?index===0}}
+                <li class='active'>{{=value.text}}</li>
+                {{??index!==0}}
+                <li>{{=value.text}}</li>
+            {{?}}  
+        {{~}}
+    </script>
+    <script>
+    //    one.addEventListener('click', function(e){
+    //         console.log(e.target.id);
+    //         console.log(e.currentTarget.id);
+    //    },false);
+    //    three.addEventListener('click', function(e){
+    //         console.log(e.target.id);
+    //         console.log(e.currentTarget.id);
+    //    },false);
+    </script>
+    <script>
+        //获取data里面的数据
+        // var content=document.getElementById('content');
+        // var datas=document.getElementById('datas');
+        // console.log(content.dataset.userList);  
+        // //   获取时驼峰式，但是在标签中尽量不要写驼峰式
+        // console.log(datas.dataset.textId);
+        // console.log(datas.dataset.textid);
+        // //设置data属性值
+        // datas.dataset.name='设置的data数据';
+        // console.log(datas.dataset.name);
+        //jq
+        // console.log($('#content').data("userList"));
+        // console.log($("#datas").data('textid',"设置的data数据"))
+    </script>
+   
+    </script>
+    <script>
+        $.ajax({
+            url:"./demo.json",
+            success(data){
+                console.log(data);
+                var dot=doT.template($("#listDot").text());
+                $("#list").html(dot(data));
+            }
+        })
+            $('#list li').on('click',function(){
+                $(this).addClass("active").siblings("li").removeClass("active");
+            })  
+    </script>
+    
+</body>
+</html>
